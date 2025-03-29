@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'  # Thay đổi phiên bản Node.js nếu cần
+          node-version: '20'  
 
       - name: Install dependencies
         run: npm install  # Cài đặt các phụ thuộc
