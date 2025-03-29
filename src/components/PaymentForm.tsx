@@ -21,9 +21,9 @@ import { PaymentData } from '@/utils/qrGenerator';
 const formSchema = z.object({
   amount: z.coerce
     .number()
-    .positive({ message: "Amount must be greater than 0" })
-    .min(1000, { message: "Amount must be at least 1,000 VND" }),
-  message: z.string().max(100, { message: "Message must be less than 100 characters" }).optional(),
+    .positive({ message: "Số tiền phải lớn hơn 0" })
+    .min(1000, { message: "Số tiền tối thiểu là 1.000 VNĐ" }),
+  message: z.string().max(100, { message: "Lời nhắn không được quá 100 ký tự" }).optional(),
 });
 
 interface PaymentFormProps {
@@ -52,7 +52,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onGenerate, isGenerating }) =
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="payment-gradient rounded-t-lg">
-        <CardTitle className="text-white text-center">QR Payment Generator</CardTitle>
+        <CardTitle className="text-white text-center">Tạo Mã QR Thanh Toán</CardTitle>
       </CardHeader>
       <CardContent className="p-6">
         <Form {...form}>
@@ -62,11 +62,11 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onGenerate, isGenerating }) =
               name="amount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Amount (VND)</FormLabel>
+                  <FormLabel>Số tiền (VNĐ)</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
-                      placeholder="Enter amount"
+                      placeholder="Nhập số tiền"
                       {...field}
                       className="text-lg"
                     />
@@ -81,10 +81,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onGenerate, isGenerating }) =
               name="message"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Message (Optional)</FormLabel>
+                  <FormLabel>Lời nhắn (Không bắt buộc)</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Add a message for the recipient"
+                      placeholder="Thêm lời nhắn cho người nhận"
                       {...field}
                       className="resize-none h-24"
                     />
@@ -99,7 +99,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onGenerate, isGenerating }) =
               className="w-full payment-gradient hover:opacity-90 transition-opacity"
               disabled={isGenerating}
             >
-              {isGenerating ? "Generating..." : "Generate QR Code"}
+              {isGenerating ? "Đang tạo..." : "Tạo Mã QR"}
             </Button>
           </form>
         </Form>

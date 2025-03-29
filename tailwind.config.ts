@@ -64,9 +64,9 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				payment: {
-					purple: '#8A2BE2',
-					blue: '#4169E1',
-					green: '#3CB371',
+					purple: '#E1000F',  // Màu đỏ của MoMo
+					blue: '#0060FF',    // Màu xanh của VNPay
+					green: '#00A67E',   // Màu xanh lá của ZaloPay
 				}
 			},
 			borderRadius: {
@@ -102,7 +102,7 @@ export default {
 				'pulse-scale': 'pulse-scale 2s ease-in-out infinite'
 			},
 			backgroundImage: {
-				'gradient-payment': 'linear-gradient(135deg, #8A2BE2 0%, #4169E1 100%)',
+				'gradient-payment': 'linear-gradient(135deg, #E1000F 0%, #FF5C39 100%)',
 			}
 		}
 	},

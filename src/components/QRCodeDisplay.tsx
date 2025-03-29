@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { QrCode, Copy, Download, Check } from 'lucide-react';
 import { formatCurrency } from '@/utils/qrGenerator';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 interface QRCodeDisplayProps {
   qrCodeUrl: string;
@@ -46,8 +46,8 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ qrCodeUrl, amount, messag
               
               setCopied(true);
               toast({
-                title: "Copied!",
-                description: "QR code copied to clipboard",
+                title: "Đã sao chép!",
+                description: "Mã QR đã được sao chép vào bộ nhớ tạm",
               });
               
               // Reset the copied state after 2 seconds
@@ -59,8 +59,8 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ qrCodeUrl, amount, messag
     } catch (error) {
       console.error('Failed to copy:', error);
       toast({
-        title: "Error",
-        description: "Failed to copy QR code",
+        title: "Lỗi",
+        description: "Không thể sao chép mã QR",
         variant: "destructive",
       });
     }
@@ -71,20 +71,20 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ qrCodeUrl, amount, messag
     try {
       const link = document.createElement('a');
       link.href = qrCodeUrl;
-      link.download = `payment-qr-${amount}.png`;
+      link.download = `thanh-toan-qr-${amount}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       
       toast({
-        title: "Downloaded!",
-        description: "QR code saved to your device",
+        title: "Đã tải xuống!",
+        description: "Mã QR đã được lưu vào thiết bị của bạn",
       });
     } catch (error) {
       console.error('Failed to download:', error);
       toast({
-        title: "Error",
-        description: "Failed to download QR code",
+        title: "Lỗi",
+        description: "Không thể tải xuống mã QR",
         variant: "destructive",
       });
     }
@@ -97,7 +97,7 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ qrCodeUrl, amount, messag
           <div className="mb-4 text-center">
             <div className="inline-flex items-center gap-2 mb-1">
               <QrCode className="h-5 w-5 text-payment-purple" />
-              <h3 className="text-lg font-semibold text-gray-800">Payment QR Code</h3>
+              <h3 className="text-lg font-semibold text-gray-800">Mã QR Thanh Toán</h3>
             </div>
             <div className="text-2xl font-bold text-payment-purple">{formatCurrency(amount)}</div>
             {message && <p className="text-sm text-gray-600 mt-1">"{message}"</p>}
@@ -107,7 +107,7 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ qrCodeUrl, amount, messag
             <img 
               ref={qrRef}
               src={qrCodeUrl} 
-              alt="Payment QR Code" 
+              alt="Mã QR Thanh Toán" 
               className="w-64 h-64"
             />
           </div>
@@ -119,14 +119,14 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ qrCodeUrl, amount, messag
               onClick={copyToClipboard}
             >
               {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-              {copied ? "Copied" : "Copy"}
+              {copied ? "Đã sao chép" : "Sao chép"}
             </Button>
             <Button 
               className="flex items-center gap-2 bg-payment-green hover:bg-opacity-90"
               onClick={downloadQRCode}
             >
               <Download className="h-4 w-4" />
-              Download
+              Tải xuống
             </Button>
           </div>
         </div>

@@ -36,11 +36,11 @@ const Index = () => {
         <div className="flex items-center justify-center gap-3 mb-2">
           <QrCode size={32} className="text-payment-purple" />
           <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-payment">
-            Auto QR Payment Generator
+            Tạo Mã QR Thanh Toán Tự Động
           </h1>
         </div>
         <p className="text-gray-600 max-w-md mx-auto">
-          Quickly generate payment QR codes with custom amounts and messages
+          Tạo nhanh mã QR thanh toán với số tiền và lời nhắn tùy chỉnh
         </p>
       </header>
 
@@ -64,15 +64,15 @@ const Index = () => {
           <div className="w-full md:w-1/2 flex items-center justify-center p-10">
             <div className="text-center text-gray-400">
               <QrCode size={80} className="mx-auto mb-4 opacity-30" />
-              <p>Your generated QR code will appear here</p>
+              <p>Mã QR sẽ xuất hiện tại đây sau khi tạo</p>
             </div>
           </div>
         )}
       </div>
 
       <footer className="mt-16 text-center text-gray-500 text-sm">
-        <p>Scan the QR code with any QR scanner or payment app.</p>
-        <p className="mt-2">The QR contains the amount and message you specified.</p>
+        <p>Quét mã QR bằng bất kỳ ứng dụng quét mã QR hoặc ứng dụng thanh toán nào.</p>
+        <p className="mt-2">Mã QR chứa số tiền và tin nhắn bạn đã nhập.</p>
       </footer>
     </div>
   );

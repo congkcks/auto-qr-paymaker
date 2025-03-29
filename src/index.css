@@ -95,9 +95,15 @@
 }
 
 .qr-container {
-  box-shadow: 0 4px 20px rgba(138, 43, 226, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 96, 255, 0.15);
 }
 
 .payment-gradient {
-  background: linear-gradient(135deg, #8A2BE2 0%, #4169E1 100%);
+  background: linear-gradient(135deg, #E1000F 0%, #FF5C39 100%);
+}
+
+@layer utilities {
+  .bg-gradient-payment {
+    background: linear-gradient(135deg, #E1000F 0%, #FF5C39 100%);
+  }
 }
