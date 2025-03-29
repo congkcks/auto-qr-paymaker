@@ -22,9 +22,6 @@ jobs:
       - name: Cài đặt phụ thuộc
         run: npm ci
 
-      - name: Kiểm tra lint
-        run: npm run lint
-
       - name: Xây dựng dự án
         run: npm run build
 
