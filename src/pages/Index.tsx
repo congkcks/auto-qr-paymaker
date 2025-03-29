@@ -11,6 +11,9 @@ const Index = () => {
     url: string;
     amount: number;
     message: string;
+    bankId?: string;
+    accountNo?: string;
+    accountName?: string;
   } | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -21,7 +24,10 @@ const Index = () => {
       setQrData({
         url: qrCodeUrl,
         amount: data.amount,
-        message: data.message
+        message: data.message,
+        bankId: data.bankId,
+        accountNo: data.accountNo,
+        accountName: data.accountName
       });
     } catch (error) {
       console.error('Failed to generate QR code:', error);
@@ -36,11 +42,11 @@ const Index = () => {
         <div className="flex items-center justify-center gap-3 mb-2">
           <QrCode size={32} className="text-payment-purple" />
           <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-payment">
-            Tạo Mã QR Thanh Toán Tự Động
+            Tạo Mã VietQR Thanh Toán
           </h1>
         </div>
         <p className="text-gray-600 max-w-md mx-auto">
-          Tạo nhanh mã QR thanh toán với số tiền và lời nhắn tùy chỉnh
+          Tạo nhanh mã VietQR với ngân hàng, số tài khoản, số tiền và lời nhắn tùy chỉnh
         </p>
       </header>
 
@@ -57,22 +63,25 @@ const Index = () => {
             <QRCodeDisplay 
               qrCodeUrl={qrData.url} 
               amount={qrData.amount} 
-              message={qrData.message} 
+              message={qrData.message}
+              bankId={qrData.bankId}
+              accountNo={qrData.accountNo}
+              accountName={qrData.accountName}
             />
           </div>
         ) : (
           <div className="w-full md:w-1/2 flex items-center justify-center p-10">
             <div className="text-center text-gray-400">
               <QrCode size={80} className="mx-auto mb-4 opacity-30" />
-              <p>Mã QR sẽ xuất hiện tại đây sau khi tạo</p>
+              <p>Mã VietQR sẽ xuất hiện tại đây sau khi tạo</p>
             </div>
           </div>
         )}
       </div>
 
       <footer className="mt-16 text-center text-gray-500 text-sm">
-        <p>Quét mã QR bằng bất kỳ ứng dụng quét mã QR hoặc ứng dụng thanh toán nào.</p>
-        <p className="mt-2">Mã QR chứa số tiền và tin nhắn bạn đã nhập.</p>
+        <p>Sử dụng API chính thức của VietQR để tạo mã QR thanh toán.</p>
+        <p className="mt-2">Quét mã bằng ứng dụng ngân hàng hỗ trợ VietQR.</p>
       </footer>
     </div>
   );

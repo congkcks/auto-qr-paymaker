@@ -10,9 +10,19 @@ interface QRCodeDisplayProps {
   qrCodeUrl: string;
   amount: number;
   message: string;
+  bankId?: string;
+  accountNo?: string;
+  accountName?: string;
 }
 
-const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ qrCodeUrl, amount, message }) => {
+const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ 
+  qrCodeUrl, 
+  amount, 
+  message, 
+  bankId,
+  accountNo,
+  accountName
+}) => {
   const { toast } = useToast();
   const [copied, setCopied] = React.useState(false);
   const qrRef = useRef<HTMLImageElement>(null);
@@ -20,47 +30,25 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ qrCodeUrl, amount, messag
   // Function to copy QR code to clipboard
   const copyToClipboard = async () => {
     try {
-      if (qrCodeUrl) {
-        // Create a canvas element
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const img = qrRef.current;
-
-        if (img && ctx) {
-          // Set canvas dimensions to match the image
-          canvas.width = img.width;
-          canvas.height = img.height;
-          
-          // Draw the image onto the canvas
-          ctx.drawImage(img, 0, 0);
-          
-          // Convert canvas to blob
-          canvas.toBlob(async (blob) => {
-            if (blob) {
-              // Copy the blob to clipboard
-              await navigator.clipboard.write([
-                new ClipboardItem({
-                  [blob.type]: blob
-                })
-              ]);
-              
-              setCopied(true);
-              toast({
-                title: "Đã sao chép!",
-                description: "Mã QR đã được sao chép vào bộ nhớ tạm",
-              });
-              
-              // Reset the copied state after 2 seconds
-              setTimeout(() => setCopied(false), 2000);
-            }
-          });
-        }
-      }
+      // Tạo một link tạm để copy
+      const tempLink = document.createElement('a');
+      tempLink.href = qrCodeUrl;
+      const text = tempLink.href;
+      await navigator.clipboard.writeText(text);
+      
+      setCopied(true);
+      toast({
+        title: "Đã sao chép!",
+        description: "Đường dẫn VietQR đã được sao chép vào bộ nhớ tạm",
+      });
+      
+      // Reset the copied state after 2 seconds
+      setTimeout(() => setCopied(false), 2000);
     } catch (error) {
       console.error('Failed to copy:', error);
       toast({
         title: "Lỗi",
-        description: "Không thể sao chép mã QR",
+        description: "Không thể sao chép đường dẫn VietQR",
         variant: "destructive",
       });
     }
@@ -71,20 +59,20 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ qrCodeUrl, amount, messag
     try {
       const link = document.createElement('a');
       link.href = qrCodeUrl;
-      link.download = `thanh-toan-qr-${amount}.png`;
+      link.download = `vietqr-${bankId}-${accountNo}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       
       toast({
         title: "Đã tải xuống!",
-        description: "Mã QR đã được lưu vào thiết bị của bạn",
+        description: "Mã VietQR đã được lưu vào thiết bị của bạn",
       });
     } catch (error) {
       console.error('Failed to download:', error);
       toast({
         title: "Lỗi",
-        description: "Không thể tải xuống mã QR",
+        description: "Không thể tải xuống mã VietQR",
         variant: "destructive",
       });
     }
@@ -97,22 +85,27 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ qrCodeUrl, amount, messag
           <div className="mb-4 text-center">
             <div className="inline-flex items-center gap-2 mb-1">
               <QrCode className="h-5 w-5 text-payment-purple" />
-              <h3 className="text-lg font-semibold text-gray-800">Mã QR Thanh Toán</h3>
+              <h3 className="text-lg font-semibold text-gray-800">Mã VietQR</h3>
             </div>
+            {accountNo && bankId && (
+              <p className="text-sm text-gray-700 mb-1">
+                {accountName || accountNo} - {bankId.toUpperCase()}
+              </p>
+            )}
             <div className="text-2xl font-bold text-payment-purple">{formatCurrency(amount)}</div>
             {message && <p className="text-sm text-gray-600 mt-1">"{message}"</p>}
           </div>
 
-          <div className="bg-white p-4 rounded-lg border-2 border-gray-100 animate-pulse-scale">
+          <div className="bg-white p-4 rounded-lg border-2 border-gray-100 mb-4">
             <img 
               ref={qrRef}
               src={qrCodeUrl} 
-              alt="Mã QR Thanh Toán" 
+              alt="Mã VietQR" 
               className="w-64 h-64"
             />
           </div>
           
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-2 mt-2">
             <Button 
               variant="outline" 
               className="flex items-center gap-2"
