@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Thay đổi nếu bạn sử dụng nhánh khác
+      - main
 
 jobs:
   deploy:
@@ -11,21 +11,22 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '20'  
+          node-version: '20'
 
       - name: Install dependencies
-        run: npm install  # Cài đặt các phụ thuộc
+        run: npm ci  # Recommended for CI environments
 
       - name: Build project
-        run: npm run deploy  # Lệnh build cho Vite
+        run: npm run build  # Standard build command
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist  # Thư mục chứa file build của Vite
+          publish_dir: ./dist  # Ensure this matches your build output directory
+          publish_branch: gh-pages  # Explicitly specify the deployment branch
