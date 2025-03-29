@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -15,10 +14,10 @@ interface QRCodeDisplayProps {
   accountName?: string;
 }
 
-const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ 
-  qrCodeUrl, 
-  amount, 
-  message, 
+const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({
+  qrCodeUrl,
+  amount,
+  message,
   bankId,
   accountNo,
   accountName
@@ -30,18 +29,14 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({
   // Function to copy QR code to clipboard
   const copyToClipboard = async () => {
     try {
-      // Tạo một link tạm để copy
-      const tempLink = document.createElement('a');
-      tempLink.href = qrCodeUrl;
-      const text = tempLink.href;
-      await navigator.clipboard.writeText(text);
-      
+      await navigator.clipboard.writeText(qrCodeUrl);
+
       setCopied(true);
       toast({
         title: "Đã sao chép!",
         description: "Đường dẫn VietQR đã được sao chép vào bộ nhớ tạm",
       });
-      
+
       // Reset the copied state after 2 seconds
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
@@ -56,14 +51,35 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({
 
   // Function to download QR code
   const downloadQRCode = () => {
+    if (!qrRef.current) return;
+
     try {
+      // Create a canvas element
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      if (!ctx) {
+        throw new Error('Could not get canvas context');
+      }
+
+      // Set canvas dimensions to match the QR code image
+      canvas.width = qrRef.current.naturalWidth || qrRef.current.width;
+      canvas.height = qrRef.current.naturalHeight || qrRef.current.height;
+
+      // Draw the image on the canvas
+      ctx.drawImage(qrRef.current, 0, 0);
+
+      // Convert canvas to data URL
+      const dataUrl = canvas.toDataURL('image/png');
+
+      // Create download link
       const link = document.createElement('a');
-      link.href = qrCodeUrl;
-      link.download = `vietqr-${bankId}-${accountNo}.png`;
+      link.href = dataUrl;
+      link.download = `vietqr-${bankId || 'bank'}-${accountNo || 'account'}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
+
       toast({
         title: "Đã tải xuống!",
         description: "Mã VietQR đã được lưu vào thiết bị của bạn",
@@ -97,24 +113,25 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({
           </div>
 
           <div className="bg-white p-4 rounded-lg border-2 border-gray-100 mb-4">
-            <img 
+            <img
               ref={qrRef}
-              src={qrCodeUrl} 
-              alt="Mã VietQR" 
+              src={qrCodeUrl}
+              alt="Mã VietQR"
               className="w-64 h-64"
+              crossOrigin="anonymous"
             />
           </div>
-          
+
           <div className="flex gap-2 mt-2">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="flex items-center gap-2"
               onClick={copyToClipboard}
             >
               {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               {copied ? "Đã sao chép" : "Sao chép"}
             </Button>
-            <Button 
+            <Button
               className="flex items-center gap-2 bg-payment-green hover:bg-opacity-90"
               onClick={downloadQRCode}
             >
