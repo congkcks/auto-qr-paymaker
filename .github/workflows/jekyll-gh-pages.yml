@@ -1,31 +1,39 @@
-name: Deploy to GitHub Pages
+name: Triển khai lên GitHub Pages
 
 on:
   push:
     branches:
-      - main  # Thay đổi nếu bạn sử dụng nhánh khác
+      - main
+
+permissions:
+  contents: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Kiểm tra mã nguồn
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Thiết lập Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'  
+          node-version: '20'
+          cache: 'npm'
 
-      - name: Install dependencies
-        run: npm install  # Cài đặt các phụ thuộc
+      - name: Cài đặt phụ thuộc
+        run: npm ci
 
-      - name: Build project
-        run: npm run deploy  # Lệnh build cho Vite
+      - name: Kiểm tra lint
+        run: npm run lint
 
-      - name: Deploy to GitHub Pages
+      - name: Xây dựng dự án
+        run: npm run build
+
+      - name: Triển khai GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist  # Thư mục chứa file build của Vite
+          publish_dir: ./dist
+          publish_branch: gh-pages
